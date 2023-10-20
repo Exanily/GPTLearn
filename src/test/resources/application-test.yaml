@@ -1,0 +1,13 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/gpt_learn_test
+    username: ${db.username}
+    password: ${db.pass}
+  jpa:
+    hibernate:
+      ddl-auto: create
