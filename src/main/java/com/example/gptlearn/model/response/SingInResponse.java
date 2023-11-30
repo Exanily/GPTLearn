@@ -1,14 +1,12 @@
 package com.example.gptlearn.model.response;
 
+import lombok.Builder;
 import lombok.Getter;
 
+@Builder
 @Getter
 public class SingInResponse {
-    private final String username;
-    private final String accessToken;
+    private String username;
+    private String token;
 
-    public SingInResponse(String username, String accessToken) {
-        this.username = username;
-        this.accessToken = "Bearer " + accessToken;
-    }
 }

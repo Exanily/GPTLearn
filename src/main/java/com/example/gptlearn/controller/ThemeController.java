@@ -1,8 +1,10 @@
 package com.example.gptlearn.controller;
 
+import com.example.gptlearn.mapper.ThemeMapper;
+import com.example.gptlearn.model.response.ThemesResponse;
 import com.example.gptlearn.service.ThemeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,31 +15,27 @@ public class ThemeController {
     private final ThemeService themeService;
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestParam String theme) {
-        try {
-            return ResponseEntity.ok(themeService.add(theme));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @Secured({"ROLE_ADMIN", "ROLE_MODER"})
+    public void add(@RequestParam String name) {
+        themeService.add(name);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAll() {
-        try {
-            return ResponseEntity.ok(themeService.findAll());
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ThemesResponse getAll() {
+        return ThemesResponse.builder()
+                .themes(ThemeMapper.INSTANCE.listThemesToListDto(themeService.findAll())).build();
     }
 
     @DeleteMapping
-    public ResponseEntity<?> delete(@RequestParam String theme) {
-        try {
-            themeService.delete(theme);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @Secured({"ROLE_ADMIN", "ROLE_MODER"})
+    public void delete(@RequestParam String name) {
+        themeService.delete(name);
+    }
+
+    @DeleteMapping("/{id}")
+    @Secured({"ROLE_ADMIN", "ROLE_MODER"})
+    public void delete(@PathVariable("id") Long id) {
+        themeService.delete(id);
     }
 
 }

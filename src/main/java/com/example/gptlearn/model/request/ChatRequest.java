@@ -2,7 +2,6 @@ package com.example.gptlearn.model.request;
 
 import com.example.gptlearn.model.dto.Message;
 import lombok.Data;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +13,9 @@ public class ChatRequest {
     private int n;
     private double temperature;
 
-    public ChatRequest(String model, String prompt) {
+    public ChatRequest(String model, String prompt, int n) {
         this.model = model;
-
+        this.n = n;
         this.messages = new ArrayList<>();
         this.messages.add(new Message("user", prompt));
     }
