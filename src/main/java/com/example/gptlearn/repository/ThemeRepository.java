@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ThemeRepository extends JpaRepository<Theme, String> {
+public interface ThemeRepository extends JpaRepository<Theme, Long> {
     Optional<Theme> findByName(String name);
 
+    void deleteByName(String name);
 }

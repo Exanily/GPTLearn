@@ -2,9 +2,8 @@ package com.example.gptlearn.mapper;
 
 import com.example.gptlearn.entity.Theme;
 
+import com.example.gptlearn.model.dto.ThemeDto;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ValueMapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -18,5 +17,7 @@ public interface ThemeMapper {
         return theme.getName();
     }
 
-    List<String> themesToStrings(List<Theme> themes);
+     ThemeDto themesToDto(Theme theme);
+
+    List<ThemeDto> listThemesToListDto(List<Theme> themes);
 }

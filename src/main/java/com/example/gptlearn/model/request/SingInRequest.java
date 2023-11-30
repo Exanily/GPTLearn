@@ -10,4 +10,12 @@ public class SingInRequest {
     @NonNull
     private String password;
 
+    public SingInRequest(@NonNull String username, @NonNull String password) {
+        this.username = username.trim();
+        this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username.trim();
+    }
 }

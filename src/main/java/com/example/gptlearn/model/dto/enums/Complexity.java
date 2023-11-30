@@ -1,10 +1,10 @@
-package com.example.gptlearn.model.dto;
+package com.example.gptlearn.model.dto.enums;
 
 import lombok.Getter;
 
 @Getter
 public enum Complexity {
-    EASY("легко"),
+    SIMPLE("легко"),
     NORMAL("нормально"),
     HARD("сложно");
     private final String value;

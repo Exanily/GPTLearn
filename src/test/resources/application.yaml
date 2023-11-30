@@ -1,0 +1,21 @@
+server:
+  servlet:
+    context-path: /api/
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    change-log: "db/changelog/db.changelog-master.xml"
+  datasource:
+    url: jdbc:h2:mem:testdb
+app:
+  openai:
+    model: gpt-4-1106-preview
+    api:
+      url: https://api.openai.com/v1/chat/completions
+      key: "key"
+  jwt:
+    secret: "fsdgghdgh"
+    lifetime: 30m

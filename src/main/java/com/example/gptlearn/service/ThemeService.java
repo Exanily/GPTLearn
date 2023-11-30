@@ -3,10 +3,10 @@ package com.example.gptlearn.service;
 import com.example.gptlearn.entity.Theme;
 import com.example.gptlearn.exception.ThemeDuplicateException;
 import com.example.gptlearn.exception.ThemeNotFoundException;
-import com.example.gptlearn.mapper.ThemeMapper;
 import com.example.gptlearn.repository.ThemeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,21 +22,26 @@ public class ThemeService {
         return themeRepository.findByName(name).orElseThrow(() -> new ThemeNotFoundException(THEME_NOT_FOUND));
     }
 
-    public List<String> findAll() {
-        return ThemeMapper.INSTANCE.themesToStrings(themeRepository.findAll());
+    public List<Theme> findAll() {
+        return themeRepository.findAll();
     }
 
+    @Transactional
     public Theme add(String name) {
         checkForDuplicate(name);
-        Theme theme1 = new Theme(name);
-        return themeRepository.save(theme1);
+        Theme theme = new Theme();
+        theme.setName(name);
+        return themeRepository.save(theme);
     }
 
+    @Transactional
     public void delete(String name) {
-        findByName(name);
-        themeRepository.deleteById(name);
+        themeRepository.deleteByName(name);
     }
-
+    @Transactional
+    public void delete(Long id) {
+        themeRepository.deleteById(id);
+    }
     private void checkForDuplicate(String name) {
         try {
             findByName(name);

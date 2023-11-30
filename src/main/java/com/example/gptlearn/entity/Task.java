@@ -1,14 +1,18 @@
 package com.example.gptlearn.entity;
 
-import com.example.gptlearn.model.dto.Complexity;
+import com.example.gptlearn.model.dto.enums.Complexity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "task")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Task {
 
     @Id
@@ -23,9 +27,6 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Complexity complexity;
 
-    @Column(name = "title", nullable = false)
-    private String title;
-
     @Column(name = "description")
     private String description;
 
@@ -34,5 +35,8 @@ public class Task {
 
     @Column(name = "solution")
     private String solution;
+
+    @Column(name = "title")
+    private String title;
 
 }
