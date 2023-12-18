@@ -1,7 +1,7 @@
 package com.example.gptlearn.service;
 
 import com.example.gptlearn.entity.User;
-import com.example.gptlearn.model.dto.enums.Role;
+import com.example.gptlearn.model.dto.enums.RoleE;
 import com.example.gptlearn.repository.UserRepository;
 import com.example.gptlearn.securuty.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
-        user.getRoles().add(roleService.getRole(Role.ROLE_USER.name()));
+        user.getRoles().add(roleService.getRole(RoleE.ROLE_USER.name()));
         user.setRegistrationDate(new Date());
         return userRepository.save(user);
     }

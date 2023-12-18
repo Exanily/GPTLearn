@@ -20,8 +20,8 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class TaskGeneratorService {
-    private final ChatGPTService gptService;
+public class TaskManagementService {
+    private final ChatGPTCommunicationService gptService;
     private final TaskService taskService;
     private final ThemeService themeService;
 

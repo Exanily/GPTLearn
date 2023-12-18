@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Date;
@@ -19,6 +20,7 @@ public class ErrorControllerHandler {
             ThemeDuplicateException.class,
             ThemeNotFoundException.class
     })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> responseBadRequest(RuntimeException exception) {
         return buildResponse(HttpStatus.BAD_REQUEST, exception);
     }
@@ -26,6 +28,7 @@ public class ErrorControllerHandler {
     @ExceptionHandler({ChatGPTResponseException.class,
             RoleNotFoundException.class
     })
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> responseEntity(RuntimeException exception) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception);
     }

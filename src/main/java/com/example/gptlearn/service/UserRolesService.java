@@ -2,6 +2,7 @@ package com.example.gptlearn.service;
 
 import com.example.gptlearn.entity.Role;
 import com.example.gptlearn.entity.User;
+import com.example.gptlearn.model.dto.enums.RoleE;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,7 @@ public class UserRolesService {
     }
 
     public void addModer(User user) {
-        Role moder = roleService.getRole(com.example.gptlearn.model.dto.enums.Role.ROLE_MODER.name());
+        Role moder = roleService.getRole(RoleE.ROLE_MODER.name());
         add(user, moder);
     }
 
@@ -31,7 +32,7 @@ public class UserRolesService {
         deleteModer(user);
     }
     public void deleteModer(User user) {
-        Role moder = roleService.getRole(com.example.gptlearn.model.dto.enums.Role.ROLE_MODER.name());
+        Role moder = roleService.getRole(RoleE.ROLE_MODER.name());
         delete(user, moder);
     }
 

@@ -12,5 +12,6 @@ import java.util.List;
 public class UserDto {
     private String username;
     private List<String> roles;
-    private List<TaskCompletionDto> taskCompletion;
+    private int totalTasks;
+    private int solvedTasks;
 }

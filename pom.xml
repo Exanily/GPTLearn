@@ -9,8 +9,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>GPTLearn</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>GPTLearn-App</artifactId>
+    <version>1</version>
     <name>GPTLearn</name>
     <description>GPTLearn</description>
     <properties>
@@ -81,11 +81,7 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.2.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
-            <version>2.1.0</version>
-        </dependency>
+
     </dependencies>
 
     <build>

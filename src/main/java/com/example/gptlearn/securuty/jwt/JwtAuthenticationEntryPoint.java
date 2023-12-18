@@ -9,6 +9,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,8 +25,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         final Map<String, Object> body = new HashMap<>();
 
-        body.put("message", authException.getMessage());
-        body.put("path", request.getServletPath());
+        body.put("error", authException.getMessage());
+        body.put("date", new Date());
 
         mapper.writeValue(response.getOutputStream(), body);
     }
