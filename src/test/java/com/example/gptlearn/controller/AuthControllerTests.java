@@ -1,17 +1,14 @@
 package com.example.gptlearn.controller;
 
 import com.example.gptlearn.AbstractTest;
-import com.example.gptlearn.entity.User;
 import com.example.gptlearn.repository.UserRepository;
+import com.example.gptlearn.service.UserService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Date;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -28,9 +25,9 @@ public class AuthControllerTests extends AbstractTest {
     private static final String BAD_PASSWORD = PASSWORD + 1;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UserRepository userRepository;
     @Autowired
-    protected UserRepository userRepository;
+    private UserService userService;
 
     @AfterEach
     void clearUserRepo() {
@@ -61,7 +58,7 @@ public class AuthControllerTests extends AbstractTest {
 
     @Test
     void should_returnBadRequest_when_singUpUsernameBusy() throws Exception {
-        userRepository.save(newUser());
+        userService.add(USERNAME, PASSWORD);
 
         JSONObject user = singUpJSON(PASSWORD);
         this.mockMvc.perform(post(URL_SING_UP).contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +71,7 @@ public class AuthControllerTests extends AbstractTest {
 
     @Test
     void should_returnOk_when_singInCorrectData() throws Exception {
-        userRepository.save(newUser());
+        userService.add(USERNAME, PASSWORD);
 
         JSONObject object = singInJSON(PASSWORD);
         this.mockMvc.perform(post(URL_SING_IN).contentType(MediaType.APPLICATION_JSON)
@@ -86,7 +83,7 @@ public class AuthControllerTests extends AbstractTest {
 
     @Test
     void should_returnBadRequest_when_singInNotCorrectData() throws Exception {
-        userRepository.save(newUser());
+        userService.add(USERNAME, PASSWORD);
 
         JSONObject object = singInJSON(BAD_PASSWORD);
         this.mockMvc.perform(post(URL_SING_IN).contentType(MediaType.APPLICATION_JSON)
@@ -110,7 +107,4 @@ public class AuthControllerTests extends AbstractTest {
         return object;
     }
 
-    private User newUser() {
-        return new User(1L, USERNAME, passwordEncoder.encode(PASSWORD), new Date(), null, null);
-    }
 }

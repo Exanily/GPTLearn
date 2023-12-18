@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -38,5 +40,9 @@ public class Task {
 
     @Column(name = "title")
     private String title;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "task_id", insertable = false, updatable = false)
+    private List<TaskCompletion> taskCompletionList;
 
 }

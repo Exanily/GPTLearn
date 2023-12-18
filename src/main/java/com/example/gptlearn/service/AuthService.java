@@ -28,32 +28,36 @@ public class AuthService {
 
     public void singUp(SingUpRequest singUpRequest) {
         try {
-            if (!singUpRequest.getPassword().equals(singUpRequest.getPassword2())) {
-                throw new PasswordMismatchException(ERROR_PASSWORD_MISMATCH);
-            }
-            userService.loadUserByUsername(singUpRequest.getUsername());
-            throw new UsernameBusyException(ERROR_USERNAME_BUSY);
+            checkingPasswordMatch(singUpRequest.getPassword(), singUpRequest.getPassword2());
+            checkingExistUsername(singUpRequest.getUsername());
         } catch (UsernameNotFoundException e) {
-            userService.add(singUpRequest.getUsername(), singUpRequest.getPassword());
-        }
-
+            userService.add(singUpRequest.getUsername(), singUpRequest.getPassword());}
     }
 
     public SingInResponse singIn(SingInRequest singInRequest) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(singInRequest.getUsername(), singInRequest.getPassword())
-            );
-
-        } catch (AuthenticationException e) {
-            throw new LoginNotCorrectException(ERROR_LOGIN_PASS);
-        }
+        auth(singInRequest.getUsername(), singInRequest.getPassword());
         UserDetails userDetails = userService.loadUserByUsername(singInRequest.getUsername());
         String token = jwtTokenUtils.generateToken(userDetails);
 
-        return SingInResponse.builder()
-                .username(userDetails.getUsername())
-                .token(token)
-                .build();
+        return SingInResponse.builder().username(userDetails.getUsername()).token(token).build();
+    }
+
+    private void checkingPasswordMatch(String pass1, String pass2) {
+        if (!pass1.equals(pass2)) {
+            throw new PasswordMismatchException(ERROR_PASSWORD_MISMATCH);
+        }
+    }
+
+    private void checkingExistUsername(String username) {
+        userService.loadUserByUsername(username);
+        throw new UsernameBusyException(ERROR_USERNAME_BUSY);
+    }
+
+    private void auth(String username, String pass) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, pass));
+        } catch (AuthenticationException e) {
+            throw new LoginNotCorrectException(ERROR_LOGIN_PASS);
+        }
     }
 }

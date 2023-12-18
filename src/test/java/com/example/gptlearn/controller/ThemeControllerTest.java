@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,7 +45,7 @@ public class ThemeControllerTest extends AbstractTest {
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
-    void should_returnForbidden_when_addUser() throws Exception {
+    void should_returnForbidden_when_addThemeToUser() throws Exception {
         this.mockMvc.perform(post("/theme").param("name", "география"))
                 .andDo(print())
                 .andExpect(status().isForbidden())
@@ -54,21 +55,23 @@ public class ThemeControllerTest extends AbstractTest {
     @Test
     @WithMockUser(username = "moder", roles = "MODER")
     void should_returnOk_when_addModer() throws Exception {
-        this.mockMvc.perform(post("/theme").param("name", "география"))
+        String name = "география";
+        this.mockMvc.perform(post("/theme").param("name", name))
                 .andDo(print())
                 .andExpect(status().isOk())
         ;
+
+        assertThat(themeRepository.findByName(name)).isNotEmpty();
     }
 
 
     @Test
     @WithMockUser(username = "moder", roles = "MODER")
     void should_returnExceptionExist_when_addThemeExist() throws Exception {
-        Theme theme = new Theme();
-        theme.setName("география");
-        themeRepository.save(theme);
+        String name = "география";
+        createAndSaveTheme(name);
 
-        this.mockMvc.perform(post("/theme").param("name", "география"))
+        this.mockMvc.perform(post("/theme").param("name", name))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
         ;
@@ -81,5 +84,63 @@ public class ThemeControllerTest extends AbstractTest {
                 .andDo(print())
                 .andExpect(status().isOk())
         ;
+
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    void should_returnOk_when_deleteTheme() throws Exception {
+        String name = "география";
+        createAndSaveTheme(name);
+
+        this.mockMvc.perform(delete("/theme").param("name", name))
+                .andDo(print())
+                .andExpect(status().isOk())
+        ;
+
+        assertThat(themeRepository.findByName(name)).isEmpty();
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    void should_returnOk_when_deleteThemeToUrl() throws Exception {
+        String name = "география";
+        Theme theme = createAndSaveTheme(name);
+
+        this.mockMvc.perform(delete("/theme/" + theme.getId()))
+                .andDo(print())
+                .andExpect(status().isOk())
+        ;
+
+        assertThat(themeRepository.findByName(name)).isEmpty();
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    void should_returnOk_when_deleteNotExistTheme() throws Exception {
+        String name = "география";
+        themeRepository.deleteByName(name);
+
+        this.mockMvc.perform(delete("/theme").param("name", name))
+                .andDo(print())
+                .andExpect(status().isOk())
+        ;
+
+        assertThat(themeRepository.findByName(name)).isEmpty();
+    }
+
+
+    private Theme createAndSaveTheme(String name) {
+        return saveTheme(createTheme(name));
+    }
+
+    private Theme createTheme(String name) {
+        Theme theme = new Theme();
+        theme.setName(name);
+        return theme;
+    }
+
+    private Theme saveTheme(Theme theme) {
+        return themeRepository.save(theme);
     }
 }

@@ -16,7 +16,7 @@ public class ThemeController {
 
     @PostMapping
     @Secured({"ROLE_ADMIN", "ROLE_MODER"})
-    public void add(@RequestParam String name) {
+    public void add(@RequestParam("name") String name) {
         themeService.add(name);
     }
 
@@ -28,7 +28,7 @@ public class ThemeController {
 
     @DeleteMapping
     @Secured({"ROLE_ADMIN", "ROLE_MODER"})
-    public void delete(@RequestParam String name) {
+    public void delete(@RequestParam("name") String name) {
         themeService.delete(name);
     }
 

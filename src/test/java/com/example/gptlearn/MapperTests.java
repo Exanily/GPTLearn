@@ -70,7 +70,7 @@ public class MapperTests extends AbstractTest {
         User user = createUser();
         UserDto expected = createUserDto();
 
-        UserDto actual = UserMapper.INSTANCE.userToDto(user);
+        UserDto actual = UserMapper.INSTANCE.userToDto(user, 1, 0);
 
         assertEquals(expected, actual);
     }
@@ -87,11 +87,11 @@ public class MapperTests extends AbstractTest {
     final Complexity complexity = Complexity.NORMAL;
 
     private Task createTask() {
-        return new Task(idTask, createTheme(), Complexity.NORMAL, description, hint, solution, title);
+        return new Task(idTask, createTheme(), Complexity.NORMAL, description, hint, solution, title, null);
     }
 
     private TaskDto createTaskDto() {
-        return new TaskDto(idTask, ThemeMapper.INSTANCE.themesToDto(createTheme()), complexity.getValue(), description, hint, solution, title);
+        return new TaskDto(idTask, createTheme().getName(), complexity.getValue(), description, hint, solution, title);
     }
 
     final Date date = new Date();
@@ -117,6 +117,6 @@ public class MapperTests extends AbstractTest {
     }
 
     private UserDto createUserDto() {
-        return new UserDto(username, List.of(role.getName()), List.of(createTaskCompletionDto()));
+        return new UserDto(username, List.of(role.getName()), 1, 0);
     }
 }

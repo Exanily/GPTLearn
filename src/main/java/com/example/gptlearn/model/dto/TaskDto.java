@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TaskDto {
     private Long id;
-    private ThemeDto theme;
+    private String theme;
     private String complexity;
     private String description;
     private String hint;

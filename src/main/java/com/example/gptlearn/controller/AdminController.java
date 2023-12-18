@@ -2,6 +2,7 @@ package com.example.gptlearn.controller;
 
 import com.example.gptlearn.service.UserRolesService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,12 +13,14 @@ public class AdminController {
     private final UserRolesService userRolesService;
 
     @PostMapping
-    public void add(@RequestParam String username) {
+    @Secured({"ROLE_ADMIN"})
+    public void add(@RequestParam("username") String username) {
         userRolesService.addModer(username);
     }
 
     @DeleteMapping
-    public void delete(@RequestParam String username) {
+    @Secured({"ROLE_ADMIN"})
+    public void delete(@RequestParam("username") String username) {
         userRolesService.deleteModer(username);
     }
 }

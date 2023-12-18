@@ -11,19 +11,18 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Objects;
 
 @Service
 @Log4j2
-public class ChatGPTService {
+public class ChatGPTCommunicationService {
     private final RestTemplate restTemplate;
 
     @Autowired
-    public ChatGPTService(@Qualifier("openaiRestTemplate") RestTemplate restTemplate,
-                          @Value("${app.openai.model}") String model,
-                          @Value("${app.openai.api.url}") String apiUrl) {
+    public ChatGPTCommunicationService(@Qualifier("openaiRestTemplate") RestTemplate restTemplate,
+                                       @Value("${app.openai.model}") String model,
+                                       @Value("${app.openai.api.url}") String apiUrl) {
         this.restTemplate = restTemplate;
         this.model = model;
         this.apiUrl = apiUrl;
@@ -34,12 +33,14 @@ public class ChatGPTService {
 
 
     public ChatResponse getResponse(String message, int n) {
-        ChatRequest request = new ChatRequest(model, message, n);
+        ChatRequest request = new ChatRequest(model, message, n, 1);
         HttpEntity<ChatRequest> httpEntity = new HttpEntity<>(request);
-        ResponseEntity<ChatResponse> response = restTemplate.exchange(apiUrl, HttpMethod.POST, httpEntity, ChatResponse.class);
-        if (!response.getStatusCode().is2xxSuccessful()){
-            log.error("message request: {} \n response: {}" , message, response);
-            throw new ChatGPTResponseException(Objects.requireNonNull(response.getBody()).toString());
+        ResponseEntity<ChatResponse> response;
+        try {
+            response = restTemplate.exchange(apiUrl, HttpMethod.POST, httpEntity, ChatResponse.class);
+        } catch (RestClientException exception) {
+            log.error("Message request: {} \n Response: {}", message, exception.getMessage());
+            throw new ChatGPTResponseException("Ошибка на сервере");
         }
         return response.getBody();
     }
