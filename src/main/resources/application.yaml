@@ -23,7 +23,7 @@ springdoc:
 
 app:
   openai:
-    model: gpt-4-1106-preview
+    model: ${OPENAI_API_MODEL}
     api:
       url: https://api.openai.com/v1/chat/completions
       key: ${OPENAI_API_KEY}
