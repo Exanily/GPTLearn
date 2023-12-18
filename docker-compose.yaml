@@ -1,0 +1,32 @@
+version: "3.7"
+services:
+  app:
+    image: "exanile/gpt_learn_app:v1.2"
+    restart: always
+    ports:
+      - "8090:8080"
+    networks:
+      - app_db_network
+    environment:
+      - DB_URL=jdbc:mysql://mysqldb:3306/gpt_learn?useSSL=false&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - DB_USER=root
+      - DB_PW=testtest
+      - OPENAI_API_KEY=
+      - OPENAI_API_MODEL=gpt-3.5-turbo-0613
+      - JWT_SECRET=lkgfnlnhkfnhkjfghjnkhgf
+      - JWT_LIFETIME=2h
+    depends_on:
+      - mysqldb
+
+
+  mysqldb:
+    image: "mysql:latest"
+    restart: always
+    networks:
+      - app_db_network
+    environment:
+      MYSQL_DATABASE: gpt_learn
+      MYSQL_PASSWORD: testtest
+      MYSQL_ROOT_PASSWORD: testtest
+networks:
+  app_db_network:
